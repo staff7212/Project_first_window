@@ -55,15 +55,14 @@ const modals = () => {
         function openModal() {
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
-            clearTimeout(TimerId);
+            //clearTimeout(timerId);
         }
 
         function closeModal(e) {
             if (e.target === modal || e.currentTarget === close || e.key === "Escape") {
                 modal.style.display = 'none';
                 document.body.style.overflow = '';
-            }
-            
+            }     
         }
 
         trigger.forEach(item => {
@@ -80,10 +79,10 @@ const modals = () => {
         document.addEventListener('keydown' , closeModal);
     }
 
-    const TimerId = setTimeout(function() {
-        document.querySelector('.popup').style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }, 5000);
+    // const timerId = setTimeout(function() {
+    //     document.querySelector('.popup').style.display = 'block';
+    //     document.body.style.overflow = 'hidden';
+    // }, 60000);
 
    
     bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
