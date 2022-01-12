@@ -14015,6 +14015,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
 /* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
 /* harmony import */ var _modules_timer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/timer */ "./src/js/modules/timer.js");
+/* harmony import */ var _modules_images__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/images */ "./src/js/modules/images.js");
+
 
 
 
@@ -14035,7 +14037,41 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.balcon_icons', '.balcon_icons_img', '.big_img > img', 'do_image_more', 'inline-block');
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
   Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('.container1', '2022-01-12');
+  Object(_modules_images__WEBPACK_IMPORTED_MODULE_6__["default"])();
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/calcScroll.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/calcScroll.js ***!
+  \**************************************/
+/*! exports provided: calcScroll, modifyBody */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "calcScroll", function() { return calcScroll; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "modifyBody", function() { return modifyBody; });
+const calcScroll = () => {
+  let div = document.createElement('div');
+  div.style.width = '50px';
+  div.style.height = '50px';
+  div.style.overflowY = 'scroll';
+  div.style.visibility = 'hidden';
+  document.body.appendChild(div);
+  let scrollWidth = div.offsetWidth - div.clientWidth;
+  div.remove();
+  return scrollWidth;
+};
+
+function modifyBody(flow, scroll) {
+  document.body.style.overflow = flow;
+  document.body.style.marginRight = `${scroll}px`;
+}
+
+
+
 
 /***/ }),
 
@@ -14212,6 +14248,47 @@ const forms = state => {
 
 /***/ }),
 
+/***/ "./src/js/modules/images.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/images.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const images = () => {
+  const imgPopup = document.createElement('div'),
+        workSection = document.querySelector('.works'),
+        bigImg = document.createElement('img');
+  imgPopup.classList.add('img_popup');
+  workSection.appendChild(imgPopup);
+  imgPopup.style.justifyContent = 'center';
+  imgPopup.style.alignItems = 'center';
+  imgPopup.style.display = 'none';
+  imgPopup.appendChild(bigImg);
+  workSection.addEventListener('click', e => {
+    e.preventDefault();
+    let target = e.target;
+
+    if (target && target.matches('.preview')) {
+      imgPopup.style.display = 'flex';
+      const path = target.parentNode.getAttribute('href');
+      bigImg.setAttribute('src', path);
+      document.body.style.overflow = 'hidden';
+    }
+
+    if (target && target.matches('div.img_popup')) {
+      imgPopup.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (images);
+
+/***/ }),
+
 /***/ "./src/js/modules/modals.js":
 /*!**********************************!*\
   !*** ./src/js/modules/modals.js ***!
@@ -14221,53 +14298,9 @@ const forms = state => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/*const modals = () => {
-    function bindModal(triggerSelector, modalSelector, closeSelector){
-        const trigger = document.querySelectorAll(triggerSelector),
-              modal = document.querySelector(modalSelector),
-              close = document.querySelector(closeSelector);
+/* harmony import */ var _calcScroll__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./calcScroll */ "./src/js/modules/calcScroll.js");
 
-        trigger.forEach(item => {
-            item.addEventListener('click', (e) => {
-                if (e.target) {
-                    e.preventDefault();
-                }
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            });
-        });
 
-        close.addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-        });
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            }
-        });
-    }
-
-    function showModalByTime(selector, time) {
-        setTimeout(function() {
-            document.querySelector(selector).style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }, time);
-
-    }
-
-   
-    bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
-    bindModal('.phone_link', '.popup', '.popup .popup_close');
-    showModalByTime('.popup', 3000);
-
-};
-
-export default modals;*/
-//мой вариант
-////////////////////////////////
 const modals = state => {
   function bindModal(triggerSelector, modalSelector, closeSelector) {
     let closeClickOverflay = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
@@ -14275,11 +14308,12 @@ const modals = state => {
           modal = document.querySelector(modalSelector),
           close = document.querySelector(closeSelector),
           windows = document.querySelectorAll('[data-modal]'),
-          inputs = document.querySelectorAll('input');
+          inputs = document.querySelectorAll('input'),
+          scroll = Object(_calcScroll__WEBPACK_IMPORTED_MODULE_0__["calcScroll"])();
 
     function openModal() {
       modal.style.display = 'block';
-      document.body.style.overflow = 'hidden'; //clearTimeout(timerId); //включить про готовности проекта
+      Object(_calcScroll__WEBPACK_IMPORTED_MODULE_0__["modifyBody"])('hidden', scroll); //clearTimeout(timerId); //включить про готовности проекта
     }
 
     function closeModal(e) {
@@ -14295,10 +14329,9 @@ const modals = state => {
           if (key == 'width' && key == 'height') {
             delete state[key];
           }
-        } // modal.style.display = 'none';
+        }
 
-
-        document.body.style.overflow = '';
+        Object(_calcScroll__WEBPACK_IMPORTED_MODULE_0__["modifyBody"])('', scroll);
       }
     }
 
@@ -14343,77 +14376,7 @@ const modals = state => {
   bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false);
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (modals); //наработки
-
-/*function show() {
-    document.querySelector('.popup').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-}
-
-function openModal() {
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    clearTimeout(showModalByTime);
-}
-
-const showModalByTime = setTimeout(show, 5000);*/
-//альтернатива с удалением событий
-
-/*const modals = () => {
-    function bindModal(triggerSelector, modalSelector, closeSelector) {
- 
-        const trigger = document.querySelectorAll(triggerSelector),
-            modal = document.querySelector(modalSelector),
-            close = document.querySelector(closeSelector);
- 
-        function triggerHandle(event) {
-            if (event.target) {
-                event.preventDefault();
-                modal.style.display = "block";
-                document.body.style.overflow = "hidden";
-            }
-            attachModalEvents();
-        }
- 
-        trigger.forEach(item => {
-            item.addEventListener('click', triggerHandle);
-        });
- 
- 
-        function closeModal(event) {
-            if (event.currentTarget === close || event.target === modal || event.key === "Escape") {
-                modal.style.display = "none";
-                document.body.style.overflow = "";
-                detachModalEvents();
-            }
-        }
- 
-        function attachModalEvents() {
-            close.addEventListener('click', closeModal);
-            modal.addEventListener('click', closeModal);
-            document.addEventListener('keydown', closeModal);
-        }
- 
-        function detachModalEvents() {
-            close.removeEventListener('click', closeModal);
-            modal.removeEventListener('click', closeModal);
-            document.removeEventListener('keydown', closeModal);
-        }
-    }
- 
-    function showModalByTime(selector, timeout) {
-        setTimeout(() => {
-            document.querySelector(selector).style.display = 'block';
-            document.body.style.overflow = "hidden";
-        }, timeout);
-    }
- 
- 
-    bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
-    bindModal('.phone_link', '.popup', '.popup .popup_close');
-    // showModalByTime('.popup', 60000); // не забыть включить
- 
-};*/
+/* harmony default export */ __webpack_exports__["default"] = (modals);
 
 /***/ }),
 
@@ -14480,12 +14443,13 @@ const tabs = function (headerSelector, tabSelector, contentSelector, activeClass
 __webpack_require__.r(__webpack_exports__);
 const timer = (selector, deadline) => {
   function getTimeRemaining(endtime) {
-    const t = Date.parse(endtime) - new Date() - 3 * 60 * 60 * 1000,
-          days = Math.floor(t / (1000 * 60 * 60 * 24)),
-          hours = Math.floor(t / (1000 * 60 * 60) % 24),
-          minutes = Math.floor(t / (1000 * 60) % 60),
-          seconds = Math.floor(t / 1000 % 60);
+    const total = Date.parse(endtime) - new Date() - 3 * 60 * 60 * 1000,
+          days = Math.floor(total / (1000 * 60 * 60 * 24)),
+          hours = Math.floor(total / (1000 * 60 * 60) % 24),
+          minutes = Math.floor(total / (1000 * 60) % 60),
+          seconds = Math.floor(total / 1000 % 60);
     return {
+      total,
       days,
       hours,
       minutes,

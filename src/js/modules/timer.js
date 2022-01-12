@@ -1,12 +1,13 @@
 const timer = (selector, deadline) => {
 
     function getTimeRemaining(endtime) {
-        const t = Date.parse(endtime) - new Date() - (3 * 60 * 60 * 1000),
-              days = Math.floor(t / (1000 * 60 * 60 * 24)),
-              hours = Math.floor(t / (1000 * 60 * 60) % 24),
-              minutes = Math.floor(t / (1000 * 60) % 60),
-              seconds = Math.floor(t / 1000 % 60);
+        const total = Date.parse(endtime) - new Date() - (3 * 60 * 60 * 1000),
+              days = Math.floor(total / (1000 * 60 * 60 * 24)),
+              hours = Math.floor(total / (1000 * 60 * 60) % 24),
+              minutes = Math.floor(total / (1000 * 60) % 60),
+              seconds = Math.floor(total / 1000 % 60);
         return {
+            total,
             days,
             hours,
             minutes,
