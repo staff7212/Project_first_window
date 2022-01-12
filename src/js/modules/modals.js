@@ -57,7 +57,7 @@ const modals = (state) => {
         function openModal() {
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
-            //clearTimeout(timerId); //включить про готовности проекта
+            clearTimeout(timerId); //включить про готовности проекта
         }
 
         function closeModal(e) {
@@ -112,10 +112,10 @@ const modals = (state) => {
         document.addEventListener('keydown', closeModal);
     }
     //по готовности проекта, вызов модального окна через 60 сек
-    // const timerId = setTimeout(function() {
-    //     document.querySelector('.popup').style.display = 'block';
-    //     document.body.style.overflow = 'hidden';
-    // }, 60000);
+    const timerId = setTimeout(function() {
+        document.querySelector('.popup').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }, 7000);
 
    
     bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
